@@ -5,8 +5,7 @@
  * @package    Kohana-Twig
  * @author     John Heathco <jheathco@gmail.com>
  */
-abstract class Kohana_Controller_Template_Twig extends Controller
-{
+abstract class Kohana_Controller_Template_Twig extends Controller {
 	/**
 	 * @var Twig_Environment
 	 */
@@ -32,11 +31,12 @@ abstract class Kohana_Controller_Template_Twig extends Controller
 		if (empty($this->template))
 		{
 			// Generate a template name if one wasn't set.
-			$this->template = str_replace('_', DIRECTORY_SEPARATOR, $this->request->controller).DIRECTORY_SEPARATOR.$this->request->action;
+			$this->template = str_replace('_', DIRECTORY_SEPARATOR, $this->request->controller()).DIRECTORY_SEPARATOR.$this->request->action();
 
-			if ( ! empty($this->request->directory))
+			$directory = $this->request->directory();
+			if ( ! empty($directory))
 			{
-				$this->template = $this->request->directory.DIRECTORY_SEPARATOR.$this->template;
+				$this->template = $this->request->directory().DIRECTORY_SEPARATOR.$this->template;
 			}
 		}
 
@@ -62,7 +62,7 @@ abstract class Kohana_Controller_Template_Twig extends Controller
 		if ($this->auto_render)
 		{
 			// Auto-render the template
-			$this->request->response = $this->template;
+			$this->response->body($this->template);
 		}
 
 		return parent::after();
